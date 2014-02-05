@@ -1,0 +1,20 @@
+<cfdi:Comprobante LugarExpedicion="MEXICALI, Baja California" certificado="MIIEdDCCA1ygAwIBAgIUMDAwMDEwMDAwMDAzMDAwNjQ1NzgwDQYJKoZIhvcNAQEF BQAwggGKMTgwNgYDVQQDDC9BLkMuIGRlbCBTZXJ2aWNpbyBkZSBBZG1pbmlzdHJh Y2nDs24gVHJpYnV0YXJpYTEvMC0GA1UECgwmU2VydmljaW8gZGUgQWRtaW5pc3Ry YWNpw7NuIFRyaWJ1dGFyaWExODA2BgNVBAsML0FkbWluaXN0cmFjacOzbiBkZSBT ZWd1cmlkYWQgZGUgbGEgSW5mb3JtYWNpw7NuMR8wHQYJKoZIhvcNAQkBFhBhY29k c0BzYXQuZ29iLm14MSYwJAYDVQQJDB1Bdi4gSGlkYWxnbyA3NywgQ29sLiBHdWVy cmVybzEOMAwGA1UEEQwFMDYzMDAxCzAJBgNVBAYTAk1YMRkwFwYDVQQIDBBEaXN0 cml0byBGZWRlcmFsMRQwEgYDVQQHDAtDdWF1aHTDqW1vYzEVMBMGA1UELRMMU0FU OTcwNzAxTk4zMTUwMwYJKoZIhvcNAQkCDCZSZXNwb25zYWJsZTogQ2xhdWRpYSBD b3ZhcnJ1YmlhcyBPY2hvYTAeFw0xMzA1MDkyMzUzMjBaFw0xNzA1MDkyMzUzMjBa MIHAMSYwJAYDVQQDEx1NQU5VRUwgQ0VTQVIgQ0FMREVSQVMgQ0FSRE9TTzEmMCQG A1UEKRMdTUFOVUVMIENFU0FSIENBTERFUkFTIENBUkRPU08xJjAkBgNVBAoTHU1B TlVFTCBDRVNBUiBDQUxERVJBUyBDQVJET1NPMRYwFAYDVQQtEw1DQUNNNTcwOTEw TUQwMRswGQYDVQQFExJDQUNNNTcwOTEwSEJDTFJOMDExETAPBgNVBAsTCE1FWElD QUxJMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCxBrA96QoYUDP0g3QGkB+V fodRGPPCMh030k6eUEhEhOxvJK4PbePqSU5Gyi6ixyva64Ca9FdqvEqDPc7QwGYh 2uXVYl3XKwiSSto4hZPNVlPrK+gbt1hXyUgq0WEZBxdgE8NXwkInrN2cz12H/vgS g1mY5XLLQmpHlKBdXY17/QIDAQABox0wGzAMBgNVHRMBAf8EAjAAMAsGA1UdDwQE AwIGwDANBgkqhkiG9w0BAQUFAAOCAQEAGFosw0UZLWjKjT5yl+sdC9Qyp4CJ/VJg fVrE/GQpCwFIAki1LQYGnraDjhQRGj5gI3jrBic5gc0J7MYhJiDvh/KF7S9AV9UC OAwk21Vb5/HypA1LtFc1I1TuvbB4o3yu5NFDlqgsA8OnScJTmR4rvLx6jA3Fa0zA sl6M7HMYLsEa4QQQUHZrfGTlYuxfONWs6W9jeRZtKKfGgCn3axT+Azwfg2PmmfuG 8ANYUQUFkddynNN0Q8elXWJaSa96pwDDmvIkyrOU1hQCpRUdEuy64TTEtJliWal9 +rFwTZhRaa1GD5iOpnKIWH8blf4QhoM39omaVY3VTlLifDFtR0K6jw== " descuento="0.00" fecha="2013-12-18T09:51:13" folio="14106" formaDePago="PAGO EN UNA SOLA EXHIBICION" metodoDePago="TARJETA" noCertificado="00001000000300064578" sello="CtUOpQrjQBkgLjkVfj5lrNpdAr8EL26e9YPX6l93jYIwAGMMgmf35e7vZkG1Jt9Z0CAWAerxUCef1dd9KFs1ip4WOFdDS78PbARKuL7ryvRa6LI33D7EdbaN256w+al/NAB5FH5qJ7XPjdK/VveqdyZB2VuihYk77i2fY0ZTI90=" serie="NOVE" subTotal="108.11" tipoDeComprobante="ingreso" total="120.00" version="3.2" xmlns:cfdi="http://www.sat.gob.mx/cfd/3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sat.gob.mx/cfd/3 http://www.sat.gob.mx/sitio_internet/cfd/3/cfdv32.xsd">
+	<cfdi:Emisor nombre="MANUEL CESAR CALDERAS CARDOSO" rfc="CACM570910MD0">
+		<cfdi:DomicilioFiscal calle="AV. ISLAS BAHAMAS Y BLVD ANAHUAC" codigoPostal="21340" colonia="FRACC. MONTEALBAN" estado="BAJA CALIFORNIA" municipio="MEXICALI" noExterior="801" pais="MEXICO"/>
+		<cfdi:RegimenFiscal Regimen="REGIMEN DE LAS PERSONAS FISICAS CON ACTIVIDADES EMPRESARIALES Y PROFESIONALES"/>
+	</cfdi:Emisor>
+	<cfdi:Receptor nombre="PATRICIA RAMIREZ AQUINO" rfc="RAAP731218L15">
+		<cfdi:Domicilio calle="AV. FRANCOS" codigoPostal="21395" colonia="VILLA TOLEDO" estado="B.C." municipio="MEXICALI" noExterior="531" pais="MEXICO"/>
+	</cfdi:Receptor>
+	<cfdi:Conceptos>
+		<cfdi:Concepto cantidad="1" descripcion="CONSUMO" importe="108.11" noIdentificacion="00000" unidad="N/A" valorUnitario="108.11"/>
+	</cfdi:Conceptos>
+	<cfdi:Impuestos totalImpuestosTrasladados="11.89">
+		<cfdi:Traslados>
+			<cfdi:Traslado importe="11.89" impuesto="IVA" tasa="11.00"/>
+		</cfdi:Traslados>
+	</cfdi:Impuestos>
+	<cfdi:Complemento>
+		<tfd:TimbreFiscalDigital FechaTimbrado="2013-12-18T11:52:13" UUID="60c0d8e9-6432-407f-97e7-866948370720" noCertificadoSAT="00001000000301251152" selloCFD="CtUOpQrjQBkgLjkVfj5lrNpdAr8EL26e9YPX6l93jYIwAGMMgmf35e7vZkG1Jt9Z0CAWAerxUCef1dd9KFs1ip4WOFdDS78PbARKuL7ryvRa6LI33D7EdbaN256w+al/NAB5FH5qJ7XPjdK/VveqdyZB2VuihYk77i2fY0ZTI90=" selloSAT="xOFsYLcQjZDnoqh+Vw2G5v1UgBKVpIcTt4JivuZJPUY481maOZT+cyjTkBwd6n+p1i6oQduaK2I6J9RJcttm4CX+Jb3meTVkN3TyJ8LLEBhKXOhoUHQxjrW4yTJK5MLsP+xqqHO9sK+O/iedLB7XDTOKpmUK6zaPeSZdjadpwPI=" version="1.0" xmlns:tfd="http://www.sat.gob.mx/TimbreFiscalDigital" xsi:schemaLocation="http://www.sat.gob.mx/TimbreFiscalDigital http://www.sat.gob.mx/TimbreFiscalDigital/TimbreFiscalDigital.xsd"/>
+	</cfdi:Complemento>
+</cfdi:Comprobante>

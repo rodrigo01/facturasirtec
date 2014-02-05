@@ -1,0 +1,131 @@
+#wheader{
+	width: 100%;
+	background-color: #bcbdc0;
+	float: left;
+}
+
+#wcont{
+	width: 900px;
+	margin: auto;
+	padding: 5px;
+}
+
+#form_login{
+	width: 50%;
+	margin: auto;
+}
+
+#logointra{
+	float: left;
+
+}
+
+#logointra img{
+	width: 125px;
+}
+
+#logoirtec{
+	float: right;
+
+}
+
+.txtintra{
+	font-size: 25px;
+	color: #FFF;
+}
+
+#menutop{
+	width: 100%;
+	float: left;
+}
+
+.menu_opciones{
+	list-style: none;
+	float: left;
+}
+
+.menu_opciones li{
+	float: left;
+}
+
+.menu_opciones a{
+	 padding: 8px;
+	 color: #FFF;
+	 margin: 5px;
+	 font-size: 16px;
+}
+
+.btn-yellow{
+	background-color: #ffcc06;
+	color: #fff;
+	border-color: #deb514;
+}
+
+.btn-yellow:hover{
+	background-color: #f4c202;
+	color: #fff;
+	border-color: #deb514;
+}
+
+.btn-green{
+	
+	background-color: #45b649;
+	color: #fff;
+	border-color: #38933b;
+}
+
+.btn-green:hover{
+	
+	background-color: #3fa543;
+	color: #fff;
+	border-color: #38933b;
+}
+
+.btn-blue{
+	
+	background-color: #0095da;
+	color: #fff;
+	border-color: #0286c3;
+}
+
+.btn-blue:hover{
+	
+	background-color: #018ccc;
+	color: #fff;
+	border-color: #0286c3;
+}
+
+
+/*General*/
+
+.spanf{
+	width: 100%;
+	float: left;
+}
+
+.span8{
+	width: 100%;
+	float: left;
+}
+
+.span3{
+	width: 30%;
+	float: left;
+	padding: 5px;
+}
+
+.span1{
+	width: 10%;
+	float: left;
+	padding: 5px;
+}
+
+.bs-callout-warning {
+background-color: #faf8f0;
+border-color: #faebcc;
+}
+.bs-callout {
+margin: 20px 0;
+padding: 20px;
+border-left: 3px solid #eee;
+}
