@@ -30,9 +30,20 @@ class Facturas extends CI_Model {
         return $query->row_array(); 
     }
 
+    public function getDetallesByID($id = null){
+        $this->db->where('id_factura',$id);
+        $query = $this->db->get('detalles_fac');
+        return $query->result_array(); 
+    }
+
     //setters
     public function addFactura( $facturadata=array() ){
         $this->db->insert('facturas', $facturadata);
+    }
+
+    public function addDetalle($detalle = array()){
+        $this->db->insert('detalles_fac', $detalle);
+
     }
 
     public function updateFactura( $facturadata=array() ){

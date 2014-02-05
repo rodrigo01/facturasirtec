@@ -35,6 +35,38 @@ class Factura extends CI_Controller {
 		$this->load->view('footer');
 	}
 
+	public function ver($id=null){
+		$this->load->model('Facturas');
+		$this->load->model('Proveedores');
+		
+		if($id!=null){
+			$data['factura'] = $this->Facturas->getFacturaByID( $id );
+			if(sizeof($data['factura'])>0){
+				//cargamos detalles de factura
+				$data['proveedor'] = $this->Proveedores->getProveedorByID( $data['factura']['id_proveedor'] );
+				$data['detalles'] = $this->Facturas->getDetallesByID( $id );
+
+				//listo para impresion
+				$this->load->view('header');
+				$this->load->view('menu_opciones');
+				$this->load->view('factura_ver',$data);
+				$this->load->view('footer');
+
+			}else{
+				$info = array();
+				$info[]= array('tipo'=>'warning','mensaje'=>'No existe Factura');
+				$this->session->set_flashdata('info',$info);
+				redirect('/proveedor', 'location');
+			}
+		}
+		else{
+			$info = array();
+			$info[]= array('tipo'=>'warning','mensaje'=>'Factura Invalida');
+			$this->session->set_flashdata('info',$info);
+			redirect('/proveedor', 'location');
+		}
+	}
+
 	public function load(){
 
 		//cargamos modulos
@@ -113,6 +145,30 @@ class Factura extends CI_Controller {
 		        if(isset($preFactura['cfdi:Impuestos']['@attributes']['totalImpuestosRetenidos'])){ $factura['impuestosretenidos'] = $preFactura['cfdi:Impuestos']['@attributes']['totalImpuestosRetenidos']; }
 				if(isset($preFactura['cfdi:Impuestos']['@attributes']['totalImpuestosTrasladados'])){ $factura['impuestostrasladados'] = $preFactura['cfdi:Impuestos']['@attributes']['totalImpuestosTrasladados']; }
 
+				//Detalles de factura
+				//cfdi:Conceptos
+				if(isset($preFactura['cfdi:Conceptos'])){
+					/*echo '<pre>';
+					print_r($preFactura['cfdi:Conceptos']['cfdi:Concepto']);
+					echo '</pre>';*/
+
+					foreach($preFactura['cfdi:Conceptos']['cfdi:Concepto'] as $rowconcepto){
+						
+						$preConcepto[] = array(
+							'cantidad'=>$rowconcepto['@attributes']['cantidad'], 
+							'descripcion'=>$rowconcepto['@attributes']['descripcion'], 
+							'punitario'=>$rowconcepto['@attributes']['valorUnitario'], 
+							'unidad'=>$rowconcepto['@attributes']['unidad'],
+							'importe'=>$rowconcepto['@attributes']['importe']
+							);
+					}
+
+					/*echo '<pre>';
+					print_r($preConcepto);
+					echo '</pre>';*/
+				}
+
+				
 				//ahora cargamos PDF
 				//inspeccionamos primer el archivo XML
 				$config['upload_path'] = './archivos/pdf/';
@@ -126,6 +182,12 @@ class Factura extends CI_Controller {
 					//cargamos factura a BD
 					$this->Facturas->addFactura( $factura );
 					$id_factura = $this->db->insert_id();
+
+					//cargamos conceptos
+					foreach($preConcepto as $detalle){
+						$detalle['id_factura'] = $id_factura;
+						$this->Facturas->addDetalle($detalle);
+					}
 
 					$archivo['id_factura'] = $id_factura;
 					$archivo['tipo_archivo'] = 1;  //1 - XML , 2-PDF
@@ -169,7 +231,7 @@ class Factura extends CI_Controller {
 					redirect('/factura/proveedores', 'location');
 
 				}
-
+				
 				
 
 

@@ -76,6 +76,24 @@ class Archivo extends CI_Controller {
 		}
 
 	}
+
+	public function descargarxml($id=null){
+		$this->load->model('Archivos');
+		$archivo = $this->Archivos->getXMLbyFactura($id);
+
+		header("Content-disposition: attachment; filename=".$archivo['nombre_archivo']);
+		header("Content-type: application/xml");
+		readfile('./archivos/xml/'.$archivo['nombre_archivo']);
+	}
+
+	public function descargarpdf($id=null){
+		$this->load->model('Archivos');
+		$archivo = $this->Archivos->getPDFbyFactura($id);
+
+		header("Content-disposition: attachment; filename=".$archivo['nombre_archivo']);
+		header("Content-type: application/pdf");
+		readfile('./archivos/pdf/'.$archivo['nombre_archivo']);
+	}
 }
 
 ?>

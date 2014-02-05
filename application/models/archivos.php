@@ -22,6 +22,20 @@ class Archivos extends CI_Model {
         return $query->row_array(); 
     }
 
+    public function getXMLbyFactura($id=null){
+        $this->db->where('id_factura',$id);
+        $this->db->where('tipo_archivo',1);
+        $query = $this->db->get('archivos');
+        return $query->row_array();
+    }
+
+    public function getPDFbyFactura($id=null){
+        $this->db->where('id_factura',$id);
+        $this->db->where('tipo_archivo',2);
+        $query = $this->db->get('archivos');
+        return $query->row_array();
+    }
+
     //setters
     public function addArchivo( $archivodata=array() ){
         $this->db->insert('archivos', $archivodata);
