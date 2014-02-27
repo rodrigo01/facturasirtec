@@ -106,17 +106,105 @@ class Factura extends CI_Controller {
 	        $preFactura = array();
 	        $factura = array();
 
+
+
 	        //recorremos XML y guardamos en variables
 	        foreach($Comprobante as $key=>$value)
 	        {
 	        	$preFactura[$key] = $value;
 	        }
 
+	        //verificamos si es Cfdi o xml normal
+	        if(isset($preFactura['cfdi:Emisor'])){
+	        	//con cfdi
+	        	$tip = 'cfdi:';
+	        }
+	        else{
+	        	//factura normal
+	        	$tip = '';
+	        }
+
 	        //Base de factura
 	        //emisor
-	        $rfc = $preFactura['cfdi:Emisor']['@attributes']['rfc'];
+	        
+
+
+	        //verificamos si existen los datos del receptor y del emisor
+	        $rfc = $preFactura[$tip.'Emisor']['@attributes']['rfc'];
 	        $proveedor = $this->Proveedores->getProveedorByRFC( $rfc );
 
+	        if(sizeof($proveedor)>0){
+	        	//si existe emisor
+	        	//echo 'Existe Emisor';
+	        }
+	        else{
+	        	//echo 'No Existe Emisor';
+	        	//creamos la cuenta a emisor
+	        	$atributo = $preFactura[$tip.'Emisor']['@attributes'];
+	        	$proveedor['rfc'] = $atributo['rfc'];
+	        	$proveedor['nombre'] = $atributo['nombre'];  
+	        	$domiciliofis = $preFactura[$tip.'Emisor'][$tip.'DomicilioFiscal']['@attributes'];
+	        	$proveedor['calle'] = $domiciliofis['calle'];
+	        	$proveedor['cp'] = $domiciliofis['codigoPostal'];
+	        	$proveedor['colonia'] = $domiciliofis['colonia'];
+	        	$proveedor['estado'] = $domiciliofis['estado'];
+	        	$proveedor['municipio'] = $domiciliofis['municipio'];
+	        	$proveedor['noexterior'] = $domiciliofis['noExterior'];
+	        	if(!isset($domiciliofis['noInterior'])){$domiciliofis['noInterior'] = "S/N";}
+	        	$proveedor['nointerior'] = $domiciliofis['noInterior'];
+	        	$proveedor['pais'] = $domiciliofis['pais'];
+	        	$this->Proveedores->addProveedor($proveedor); /// añadimos proveedor
+
+	        }
+
+	        //comprobamos receptor
+	        $rfc = $preFactura[$tip.'Receptor']['@attributes']['rfc'];
+	        $receptor = $this->Proveedores->getProveedorByRFC( $rfc );
+
+	        if(sizeof($receptor)>0){
+	        	//si existe receptor
+	        	//echo 'Existe receptor';
+	        }
+	        else{
+	        	//echo 'No Existe receptor';
+	        	//creamos la cuenta a emisor
+	        	$proveedor = array();
+	        	$atributo = $preFactura[$tip.'Receptor']['@attributes'];
+	        	$proveedor['rfc'] = $atributo['rfc'];
+	        	$proveedor['nombre'] = $atributo['nombre'];  
+	        	$domiciliofis = $preFactura[$tip.'Receptor'][$tip.'Domicilio']['@attributes'];
+	        	
+
+	        	if(!isset($domiciliofis['calle'])){$proveedor['calle'] = "No Definido";}else{$proveedor['calle'] = $domiciliofis['calle']; }
+
+	        	if(!isset($domiciliofis['codigoPostal'])){$proveedor['cp'] = "0";}else{$proveedor['cp'] = $domiciliofis['codigoPostal']; }
+	        	if(!isset($domiciliofis['colonia'])){$proveedor['colonia'] = "No Definido";}else{$proveedor['colonia'] = $domiciliofis['colonia']; }
+	        	if(!isset($domiciliofis['estado'])){$proveedor['estado'] = "No Definido";}else{$proveedor['estado'] = $domiciliofis['estado']; }
+	        	if(!isset($domiciliofis['municipio'])){$proveedor['estado'] = "No Definido";}else{$proveedor['municipio'] = $domiciliofis['municipio']; }
+
+	        	if(!isset($domiciliofis['noExterior'])){$proveedor['noexterior'] = "S/N";}else{$proveedor['noexterior'] = $domiciliofis['noExterior']; }
+
+	        	if(!isset($domiciliofis['noInterior'])){$domiciliofis['noInterior'] = "S/N";}
+	        	$proveedor['nointerior'] = $domiciliofis['noInterior'];
+
+	        	if(!isset($domiciliofis['pais'])){$proveedor['pais'] = "No Definido";}else{$proveedor['pais'] = $domiciliofis['pais']; }
+
+	        	
+
+	        	$this->Proveedores->addProveedor($proveedor); /// añadimos proveedor
+
+	        }
+
+	        $rfc = $preFactura[$tip.'Emisor']['@attributes']['rfc'];
+	        $proveedor = $this->Proveedores->getProveedorByRFC( $rfc );
+	        $factura['id_proveedor'] = $proveedor['id_proveedor'];
+
+	        $rfc = $preFactura[$tip.'Receptor']['@attributes']['rfc'];
+	        $receptor = $this->Proveedores->getProveedorByRFC( $rfc );
+	        $factura['id_receptor'] = $receptor['id_proveedor'];
+	        
+
+	       //$proveedor = $this->Proveedores->getProveedorByRFC( $rfc );
 	        if(sizeof($proveedor)>0){
 
 		        $factura['id_proveedor'] = $proveedor['id_proveedor'];
@@ -142,25 +230,53 @@ class Factura extends CI_Controller {
 		        if(isset($preFactura["@attributes"]['total'])){ $factura['total'] = $preFactura["@attributes"]['total']; }
 
 		        //Impuestos
-		        if(isset($preFactura['cfdi:Impuestos']['@attributes']['totalImpuestosRetenidos'])){ $factura['impuestosretenidos'] = $preFactura['cfdi:Impuestos']['@attributes']['totalImpuestosRetenidos']; }
-				if(isset($preFactura['cfdi:Impuestos']['@attributes']['totalImpuestosTrasladados'])){ $factura['impuestostrasladados'] = $preFactura['cfdi:Impuestos']['@attributes']['totalImpuestosTrasladados']; }
+		        if(isset($preFactura[$tip.'Impuestos']['@attributes']['totalImpuestosRetenidos'])){ $factura['impuestosretenidos'] = $preFactura[$tip.'Impuestos']['@attributes']['totalImpuestosRetenidos']; }
+				if(isset($preFactura[$tip.'Impuestos']['@attributes']['totalImpuestosTrasladados'])){ $factura['impuestostrasladados'] = $preFactura[$tip.'Impuestos']['@attributes']['totalImpuestosTrasladados']; }
 
 				//Detalles de factura
 				//cfdi:Conceptos
-				if(isset($preFactura['cfdi:Conceptos'])){
+				if(isset($preFactura[$tip.'Conceptos'])){
 					/*echo '<pre>';
 					print_r($preFactura['cfdi:Conceptos']['cfdi:Concepto']);
 					echo '</pre>';*/
+					if(isset($preFactura[$tip.'Conceptos'][$tip.'Concepto'])){
 
-					foreach($preFactura['cfdi:Conceptos']['cfdi:Concepto'] as $rowconcepto){
+						if(sizeof($preFactura[$tip.'Conceptos'][$tip.'Concepto'])>1)
+						{
+							//para varios
+							foreach($preFactura[$tip.'Conceptos'][$tip.'Concepto'] as $rowconcepto){
+							
+							$preConcepto[] = array(
+								'cantidad'=>$rowconcepto['@attributes']['cantidad'], 
+								'descripcion'=>$rowconcepto['@attributes']['descripcion'], 
+								'punitario'=>$rowconcepto['@attributes']['valorUnitario'], 
+								'unidad'=>$rowconcepto['@attributes']['unidad'],
+								'importe'=>$rowconcepto['@attributes']['importe']
+								);
+							}
+							/*echo 'Varios';
+							echo "<pre>";
+							print_r($preFactura[$tip.'Conceptos'][$tip.'Concepto']);
+							echo "</pre>";*/
+
+						}
+						else{
+							//solo uno
+							/*echo 'Solo una';
+							echo "<pre>";
+							print_r($preFactura[$tip.'Conceptos']	);
+							echo "</pre>";*/
+							$rowconcepto = $preFactura[$tip.'Conceptos'][$tip.'Concepto'];
+							$preConcepto[] = array(
+								'cantidad'=>$rowconcepto['@attributes']['cantidad'], 
+								'descripcion'=>$rowconcepto['@attributes']['descripcion'], 
+								'punitario'=>$rowconcepto['@attributes']['valorUnitario'], 
+								'unidad'=>$rowconcepto['@attributes']['unidad'],
+								'importe'=>$rowconcepto['@attributes']['importe']
+								);
+						}
+
 						
-						$preConcepto[] = array(
-							'cantidad'=>$rowconcepto['@attributes']['cantidad'], 
-							'descripcion'=>$rowconcepto['@attributes']['descripcion'], 
-							'punitario'=>$rowconcepto['@attributes']['valorUnitario'], 
-							'unidad'=>$rowconcepto['@attributes']['unidad'],
-							'importe'=>$rowconcepto['@attributes']['importe']
-							);
 					}
 
 					/*echo '<pre>';
@@ -231,9 +347,6 @@ class Factura extends CI_Controller {
 					redirect('/factura/proveedores', 'location');
 
 				}
-				
-				
-
 
 			}else{
 				$info = array();

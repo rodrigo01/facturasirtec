@@ -11,14 +11,20 @@ class Facturas extends CI_Model {
             }
 
              if(isset($options['principal'])){
-                if($options['principal'])
-                $this->db->where('facturas.id_proveedor','1');
-                else
-                $this->db->where('facturas.id_proveedor !=','1');    
+                if($options['principal']){
+                    $this->db->where('facturas.id_proveedor','1');
+                    $this->db->join('proveedores', 'proveedores.id_proveedor = facturas.id_receptor', 'left');
+                }
+                
+                else{
+                    $this->db->where('facturas.id_proveedor !=','1'); 
+                    $this->db->join('proveedores', 'proveedores.id_proveedor = facturas.id_proveedor', 'left');
+                }
+                   
             }
         }
         //join de proveedor
-        $this->db->join('proveedores', 'proveedores.id_proveedor = facturas.id_proveedor', 'left');
+        
 
         $query = $this->db->get('facturas');
         return $query->result_array();

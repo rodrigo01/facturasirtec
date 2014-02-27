@@ -19,7 +19,7 @@ class Login extends CI_Controller {
 
 		if($login_result){
 			//usuario y contraseña correctos
-			$this->session->set_userdata('userver', 'active');
+			$this->session->set_userdata('userver', 'irtec');
 			redirect('/', 'location');
 		}
 		else{
@@ -30,5 +30,14 @@ class Login extends CI_Controller {
 			redirect('/login/', 'location');
 
 		}
+	}
+
+	public function logout()
+	{
+		$this->session->set_userdata('userver', 'noactivo');
+		$info = array();
+		$info[]= array('tipo'=>'warning','mensaje'=>'Has salido satisfactoriamente del sistema');
+		$this->session->set_flashdata('info',$info);
+		redirect('/login/', 'location');
 	}
 }

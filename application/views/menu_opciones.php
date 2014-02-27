@@ -15,6 +15,7 @@
 			  </ul>
 			</div>
 		</li>
+		<li><a href="<?php echo base_url();?>login/logout" class="btn btn-blue">Salir de Intranet</a></li>
 	</ul>
 </div>
 
