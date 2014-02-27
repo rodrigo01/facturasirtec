@@ -49,9 +49,9 @@ $active_group = 'default';
 $active_record = TRUE;
 
 $db['default']['hostname'] = 'localhost';
-$db['default']['username'] = 'root';
-$db['default']['password'] = 'dominio01';
-$db['default']['database'] = 'facturacion_irtec';
+$db['default']['username'] = 'intrane2_rostest';
+$db['default']['password'] = 'rostest0101';
+$db['default']['database'] = 'intrane2_rostest';
 $db['default']['dbdriver'] = 'mysql';
 $db['default']['dbprefix'] = '';
 $db['default']['pconnect'] = TRUE;

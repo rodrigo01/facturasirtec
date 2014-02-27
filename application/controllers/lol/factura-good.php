@@ -43,13 +43,7 @@ class Factura extends CI_Controller {
 			$data['factura'] = $this->Facturas->getFacturaByID( $id );
 			if(sizeof($data['factura'])>0){
 				//cargamos detalles de factura
-				if($data['factura']['id_proveedor']!=1){
-					$data['proveedor'] = $this->Proveedores->getProveedorByID( $data['factura']['id_proveedor'] );
-				}
-				else{
-					$data['proveedor'] = $this->Proveedores->getProveedorByID( $data['factura']['id_receptor'] );
-				}
-				
+				$data['proveedor'] = $this->Proveedores->getProveedorByID( $data['factura']['id_proveedor'] );
 				$data['detalles'] = $this->Facturas->getDetallesByID( $id );
 
 				//listo para impresion
@@ -112,16 +106,6 @@ class Factura extends CI_Controller {
 	        $preFactura = array();
 	        $factura = array();
 
-	        //var_dump($Comprobante);
-
-	        if($Comprobante==""){
-	        	$info = array();
-				$info[]= array('tipo'=>'warning','mensaje'=>"No es posible procesar la factura, no se reconoce formato de factura");
-				$this->session->set_flashdata('info',$info);
-				redirect('/factura/proveedores', 'location');
-				break;
-	        }
-
 	        //recorremos XML y guardamos en variables
 	        foreach($Comprobante as $key=>$value)
 	        {
@@ -140,20 +124,7 @@ class Factura extends CI_Controller {
 
 	        //Base de factura
 	        //emisor
-
-	        //salir si encontramos ceritificado repetido
-	        if(isset($preFactura["@attributes"]['noCertificado'])){ $nocert = $preFactura["@attributes"]['noCertificado']; }
-	        if(isset($preFactura["@attributes"]['folio'])){ $nfolio = $preFactura["@attributes"]['folio']; }
-	        $existe = $this->Facturas->noCertExist($nocert,$nfolio);
-	        if($existe){
-	        	//frenamos todo
-	        	$info = array();
-				$info[]= array('tipo'=>'warning','mensaje'=>"Ya existe la factura agregada");
-				$this->session->set_flashdata('info',$info);
-				redirect('/factura/proveedores', 'location');
-				break;
-	        }
-	        //sino seguimos :D
+	        
 
 
 	        //verificamos si existen los datos del receptor y del emisor
@@ -330,10 +301,7 @@ class Factura extends CI_Controller {
 		        }
 		        if(isset($preFactura["@attributes"]['folio'])){ $factura['folio'] = $preFactura["@attributes"]['folio']; }
 		        if(isset($preFactura["@attributes"]['metodoDePago'])){ $factura['metodopago'] = $preFactura["@attributes"]['metodoDePago']; }
-
-		        //no repetir facturas tomando encuenta numero de certificado
 		        if(isset($preFactura["@attributes"]['noCertificado'])){ $factura['nocertificado'] = $preFactura["@attributes"]['noCertificado']; }
-
 		        if(isset($preFactura["@attributes"]['serie'])){ $factura['serie'] = $preFactura["@attributes"]['serie']; }
 		        if(isset($preFactura["@attributes"]['subTotal'])){ $factura['subtotal'] = $preFactura["@attributes"]['subTotal']; }
 		        if(isset($preFactura["@attributes"]['tipoDeComprobante'])){ $factura['tipocomprobante'] = $preFactura["@attributes"]['tipoDeComprobante']; }
@@ -479,8 +447,14 @@ class Factura extends CI_Controller {
 				$info[]= array('tipo'=>'warning','mensaje'=>'No existe proveedor');
 				$this->session->set_flashdata('info',$info);
 				redirect('/factura/proveedores', 'location');
-			}	
+			}
+
+			
 		}
+
+
+		
+
 
 	}
 

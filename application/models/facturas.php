@@ -65,6 +65,25 @@ class Facturas extends CI_Model {
         
     }
 
+    public function noCertExist($ncert = null, $nfolio = null ){
+
+        if($ncert!=null){
+            $this->db->where('nocertificado',$ncert);
+            $this->db->where('folio',$nfolio);
+            $query = $this->db->get('facturas');
+
+            if($query->num_rows() > 0)
+            {
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+
+
+    }
+
     //especials
 }
 

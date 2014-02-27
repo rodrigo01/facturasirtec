@@ -14,7 +14,7 @@
 | path to your installation.
 |
 */
-$config['base_url']	= 'http://tecsolutionsmx.com/facturasirtec/';
+$config['base_url']	= 'http://intranetcontable.com.mx/modulo9a/';
 
 /*
 |--------------------------------------------------------------------------

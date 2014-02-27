@@ -19,7 +19,7 @@
 			<tr>
 				<td><?php echo $factura['id_factura'];?></td>
 				<td><a href="<?php echo base_url();?>factura/ver/<?php echo $factura['id_factura'];?>"><?php echo $factura['nombre']?></a></td>
-				<td>$<?php echo $factura['total'];?></td>
+				<td>$<?php echo number_format($factura['total'], 2);?></td>
 				<td><?php if($factura['pdf']==0){echo '<a href="'.base_url().'archivo/cargarpdf/'.$factura['id_factura'].'" class="btn btn-danger"><span class="glyphicon glyphicon-upload"></span></a>';}else{ echo '<a href="'.base_url().'archivo/descargarpdf/'.$factura['id_factura'].'" class="btn btn-success"><span class="glyphicon glyphicon-save"></span></a>';}?></td>
 				<td><a href="<?php echo base_url();?>archivo/descargarxml/<?php echo $factura['id_factura']; ?>" class="btn btn-success"><span class="glyphicon glyphicon-save"></span></a></td>
 				<td><?php echo $factura['fecha'];?></td>
