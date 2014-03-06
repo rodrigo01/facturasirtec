@@ -5,7 +5,7 @@ class Welcome extends CI_Controller {
 
 	public function index()
 	{
-		if($this->session->userdata('userver')!='irtec'){
+		if($this->session->userdata('userver')!='modulo9a2'){
 			redirect('/login/', 'location');
 		}
 

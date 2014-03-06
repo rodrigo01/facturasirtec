@@ -14,7 +14,7 @@
 | path to your installation.
 |
 */
-$config['base_url']	= 'http://intranetcontable.com.mx/distrito/';
+$config['base_url']	= 'http://intranetcontable.com.mx/modulo9a/';
 
 /*
 |--------------------------------------------------------------------------

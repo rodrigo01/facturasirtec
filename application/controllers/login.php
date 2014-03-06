@@ -19,7 +19,7 @@ class Login extends CI_Controller {
 
 		if($login_result){
 			//usuario y contraseña correctos
-			$this->session->set_userdata('userver', 'irtec');
+			$this->session->set_userdata('userver', 'modulo9a2');
 			redirect('/', 'location');
 		}
 		else{

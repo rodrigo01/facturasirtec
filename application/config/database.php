@@ -49,9 +49,9 @@ $active_group = 'default';
 $active_record = TRUE;
 
 $db['default']['hostname'] = 'localhost';
-$db['default']['username'] = 'intrane2_rostest';
-$db['default']['password'] = 'rostest0101';
-$db['default']['database'] = 'intrane2_rostest';
+$db['default']['username'] = 'test';
+$db['default']['password'] = 'test';
+$db['default']['database'] = 'test';
 $db['default']['dbdriver'] = 'mysql';
 $db['default']['dbprefix'] = '';
 $db['default']['pconnect'] = TRUE;
