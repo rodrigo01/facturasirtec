@@ -35,6 +35,132 @@ class Factura extends CI_Controller {
 		$this->load->view('footer');
 	}
 
+	public function recargarDetalles($id = null){
+		$this->load->model('Facturas');
+		$this->load->model('Proveedores');
+		$this->load->model('Archivos');
+
+		if($id!=null){
+			//borramos detalles de factura
+			$this->db->where('id_factura', $id);
+			$this->db->delete('detalles_fac');
+
+			//obtenemos la factura para poder manejarla
+			$arch = $this->Archivos->getXMLbyFactura($id);
+
+			//print_r($udata);
+			
+	        $xmlfile="./archivos/xml/".$arch['nombre_archivo'];
+			
+	        $xmlRaw = file_get_contents($xmlfile);
+
+	        $this->load->library('simplexml');
+	        $Comprobante = $this->simplexml->xml_parse($xmlRaw);
+	        
+	        $preFactura = array();
+	        $factura = array();
+
+	        if($Comprobante==""){
+	        	$info = array();
+				$info[]= array('tipo'=>'warning','mensaje'=>"No es posible procesar la factura, no se reconoce formato de factura");
+				$this->session->set_flashdata('info',$info);
+				redirect('/factura/proveedores', 'location');
+				break;
+	        }
+
+	        //recorremos XML y guardamos en variables
+	        foreach($Comprobante as $key=>$value)
+	        {
+	        	$preFactura[$key] = $value;
+	        }
+
+	        //verificamos si es Cfdi o xml normal
+	        if(isset($preFactura['cfdi:Emisor'])){
+	        	//con cfdi
+	        	$tip = 'cfdi:';
+	        }
+	        else{
+	        	//factura normal
+	        	$tip = '';
+	        }
+
+	        if(isset($preFactura[$tip.'Conceptos'])){
+				/*echo '<pre>';
+				print_r($preFactura['cfdi:Conceptos']['cfdi:Concepto']);
+				echo '</pre>';*/
+				if(isset($preFactura[$tip.'Conceptos'][$tip.'Concepto'])){
+
+					if(sizeof($preFactura[$tip.'Conceptos'][$tip.'Concepto'])>1)
+					{
+						//para varios
+						foreach($preFactura[$tip.'Conceptos'][$tip.'Concepto'] as $rowconcepto){
+
+							//Hay veces que no existen campos para los detalles tramitarlos antes
+						if(!isset($rowconcepto['@attributes']['cantidad'])){$rowconcepto['@attributes']['cantidad'] = "0";}
+						if(!isset($rowconcepto['@attributes']['descripcion'])){$rowconcepto['@attributes']['descripcion'] = "Sin Desc";}
+						if(!isset($rowconcepto['@attributes']['valorUnitario'])){$rowconcepto['@attributes']['valorUnitario'] = "0";}
+						if(!isset($rowconcepto['@attributes']['unidad'])){$rowconcepto['@attributes']['unidad'] = "No Definido";}
+						if(!isset($rowconcepto['@attributes']['importe'])){$rowconcepto['@attributes']['importe'] = "No Definido";}
+
+						
+						$preConcepto[] = array(
+							'cantidad'=>$rowconcepto['@attributes']['cantidad'], 
+							'descripcion'=>$rowconcepto['@attributes']['descripcion'], 
+							'punitario'=>$rowconcepto['@attributes']['valorUnitario'], 
+							'unidad'=>$rowconcepto['@attributes']['unidad'],
+							'importe'=>$rowconcepto['@attributes']['importe']
+							);
+						}
+						/*echo 'Varios';
+						echo "<pre>";
+						print_r($preFactura[$tip.'Conceptos'][$tip.'Concepto']);
+						echo "</pre>";*/
+
+					}
+					else{
+						//solo uno
+						/*echo 'Solo una';
+						echo "<pre>";
+						print_r($preFactura[$tip.'Conceptos']	);
+						echo "</pre>";*/
+						$rowconcepto = $preFactura[$tip.'Conceptos'][$tip.'Concepto'];
+
+						//Hay veces que no existen campos para los detalles tramitarlos antes
+						if(!isset($rowconcepto['@attributes']['cantidad'])){$rowconcepto['@attributes']['cantidad'] = "0";}
+						if(!isset($rowconcepto['@attributes']['descripcion'])){$rowconcepto['@attributes']['descripcion'] = "Sin Desc";}
+						if(!isset($rowconcepto['@attributes']['valorUnitario'])){$rowconcepto['@attributes']['valorUnitario'] = "0";}
+						if(!isset($rowconcepto['@attributes']['unidad'])){$rowconcepto['@attributes']['unidad'] = "No Definido";}
+						if(!isset($rowconcepto['@attributes']['importe'])){$rowconcepto['@attributes']['importe'] = "No Definido";}
+
+						$preConcepto[] = array(
+							'cantidad'=>$rowconcepto['@attributes']['cantidad'], 
+							'descripcion'=>$rowconcepto['@attributes']['descripcion'], 
+							'punitario'=>$rowconcepto['@attributes']['valorUnitario'], 
+							'unidad'=>$rowconcepto['@attributes']['unidad'],
+							'importe'=>$rowconcepto['@attributes']['importe']
+							);
+					}
+
+				}
+
+			}
+
+			//cargamos conceptos
+			foreach($preConcepto as $detalle){
+				$detalle['id_factura'] = $id;
+				$this->Facturas->addDetalle($detalle);
+			}
+
+
+
+
+		}
+
+
+		
+
+	}//fin de recargar detalles
+
 	public function ver($id=null){
 		$this->load->model('Facturas');
 		$this->load->model('Proveedores');
@@ -449,6 +575,12 @@ class Factura extends CI_Controller {
 					$factura['pdf']=1;
 					$this->Facturas->addFactura( $factura );
 					$id_factura = $this->db->insert_id();
+
+					//cargamos conceptos
+					foreach($preConcepto as $detalle){
+						$detalle['id_factura'] = $id_factura;
+						$this->Facturas->addDetalle($detalle);
+					}
 
 					$archivo['id_factura'] = $id_factura;
 					$archivo['tipo_archivo'] = 1;  //1 - XML , 2-PDF
