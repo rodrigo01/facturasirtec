@@ -614,7 +614,32 @@ class Factura extends CI_Controller {
 			}	
 		}
 
+	}// fin de LOAD
+
+	public function buscarpor(){
+
+		//mostramos lista de proveedores
+		//selecciinamos fecha de busqueda
+		//iniciar
+		
+		$this->load->model('Proveedores');
+		$options['field'] = 'nombre';
+		$options['field'] = 'ASC';
+		$data['lprovedores'] = $this->Proveedores->getProveedores( $options );
+
+		$this->load->view('header');
+		$this->load->view('menu_opciones');
+		$this->load->view('busquedapro',$data);
+		$this->load->view('footer');
 	}
+
+	public function buscarporproveedor(){
+
+		//procesamos busqueda
+		//mostramos la info
+	}
+
+
 
 
 
